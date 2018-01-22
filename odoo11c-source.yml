@@ -1,0 +1,36 @@
+
+version: '3'
+services:
+
+  db:
+    image: postgres:9.6
+    container_name: pg9.6_odoo11c
+    labels:
+      PG9.6: "PG9.6"
+    restart: always
+    environment:
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+    volumes:
+      - 'pg_data:/var/lib/postgresql/data'
+
+  odoo11c_source:
+    build:
+      context: ./11c/source
+      dockerfile: Dockerfile
+    restart: always
+    labels:
+      odoo11c: Odoo_11c"
+    volumes:
+      - 'odoo_data:/opt/odoo'
+    container_name: odoo11c
+    ports:
+      - "7011:8069"
+    depends_on:
+      - db
+
+volumes:
+  pg_data:
+    driver: local
+  odoo_data:
+    driver: local
